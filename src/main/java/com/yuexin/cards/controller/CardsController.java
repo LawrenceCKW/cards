@@ -1,10 +1,13 @@
 package com.yuexin.cards.controller;
 
+import com.yuexin.cards.dto.CardsContactInfoDto;
 import com.yuexin.cards.dto.CardsDto;
 import com.yuexin.cards.dto.ResponseDto;
 import com.yuexin.cards.service.ICardsService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,10 +19,17 @@ import static com.yuexin.cards.constants.CardsConstants.*;
 @RequestMapping("/api")
 @Validated
 public class CardsController {
-    private final ICardsService iCardsService;
+    @Value("${build.version}")
+    private String buildVersion;
 
-    public CardsController(ICardsService iCardsService) {
+    private final ICardsService iCardsService;
+    private final Environment environment;
+    private final CardsContactInfoDto cardsContactInfoDto;
+
+    public CardsController(ICardsService iCardsService, Environment environment, CardsContactInfoDto cardsContactInfoDto) {
         this.iCardsService = iCardsService;
+        this.environment = environment;
+        this.cardsContactInfoDto = cardsContactInfoDto;
     }
 
     @PostMapping("/create")
@@ -71,5 +81,20 @@ public class CardsController {
                     .status(HttpStatus.EXPECTATION_FAILED)
                     .body(new ResponseDto(STATUS_417, MESSAGE_417_DELETE));
         }
+    }
+
+    @GetMapping("/build-info")
+    public ResponseEntity<String> getBuildInfo() {
+        return ResponseEntity.status(HttpStatus.OK).body(buildVersion);
+    }
+
+    @GetMapping("/java-version")
+    public ResponseEntity<String> getJavaVersion() {
+        return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("JAVA_HOME"));
+    }
+
+    @GetMapping("/contact-info")
+    public ResponseEntity<CardsContactInfoDto> getContactInfo() {
+        return ResponseEntity.status(HttpStatus.OK).body(cardsContactInfoDto);
     }
 }

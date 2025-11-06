@@ -16,3 +16,21 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  config:
+    import:
+      - "application_qa.yml"
+      - "application_prod.yml"
+  profiles:
+    active:
+      - "qa"
+
+build:
+  version: "1.0"
+
+cards:
+  message: "This is the local APIs that relates to cards microservice"
+  contactDetails:
+    name: "Wong Yue Xin - Developer"
+    email: "wongyuexin@gmail.com"
+  callSupport:
+    - (+65) 123-24345

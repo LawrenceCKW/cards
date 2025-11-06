@@ -1,0 +1,16 @@
+
+spring:
+  config:
+    activate:
+      on-profile: "qa"
+
+build:
+  version: "2.0"
+
+cards:
+  message: "This is the QA APIs that relates to cards microservice"
+  contactDetails:
+    name: "Lawrence Chan - QA Lead"
+    email: "chan@gmail.com"
+  callSupport:
+    - (+65) 321-24345
