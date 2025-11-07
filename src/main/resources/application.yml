@@ -3,34 +3,23 @@ server:
 spring:
   application:
     name: cards
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driverClassName: org.h2.Driver
-    username: sa
-    password: ''
-  h2:
-    console:
-      enabled: true
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-  config:
-    import:
-      - "application_qa.yml"
-      - "application_prod.yml"
   profiles:
-    active:
-      - "qa"
+    active: "prod"
+  datasource:
+    url: jdbc:mysql://localhost:3308/cardsdb
+    username: root
+    password: root
+  jpa:
+    show-sql: true
+  sql:
+    init:
+      mode: always
 
-build:
-  version: "1.0"
+  config:
+    import: "optional:configserver:http://localhost:8071/"
 
-cards:
-  message: "This is the local APIs that relates to cards microservice"
-  contactDetails:
-    name: "Wong Yue Xin - Developer"
-    email: "wongyuexin@gmail.com"
-  callSupport:
-    - (+65) 123-24345
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
